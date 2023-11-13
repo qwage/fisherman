@@ -1,17 +1,16 @@
-# api.py
+from ninja import NinjaAPI, Schema
+from .models import SensorModel
 
-from ninja import NinjaAPI
-from ninja import Schema
+api = NinjaAPI(
+    description='<a href="/">Go to Homepage</a>'
+)
 
-api = NinjaAPI()
 
 class SensorData(Schema):
     temperature: float
-    humidity: float
 
-@api.post("/sensor-update")
+
+@api.post("/temperature-update")
 def update_sensor_data(request, data: SensorData):
-    # Save or process your data here...
-    # You might want to save the data to your model
-    # SensorModel.objects.create(temperature=data.temperature, humidity=data.humidity)
+    SensorModel.objects.create(temperature=data.temperature)
     return {"status": "success", "data_received": data.dict()}
