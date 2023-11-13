@@ -1,2 +1,3 @@
 adafruit-circuitpython-dht
 Adafruit-Blinka
+requests
