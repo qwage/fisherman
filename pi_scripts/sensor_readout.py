@@ -6,7 +6,7 @@ import board
 import adafruit_dht
 import RPi.GPIO as gpio
 
-dhtDevice = adafruit_dht.DHT11(board.D4, use_pulseio=False)
+dhtDevice = adafruit_dht.DHT11(board.D4)
 print(dhtDevice)
 for i in range(4):
     try:
