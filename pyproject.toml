@@ -1,0 +1,117 @@
+[project]
+name = "fisherman"
+version = "0.0.1"
+authors = [{ name = "Quinn Joyce" }, { name = "Claude" }]
+description = "A Python package for managing hobbyist fishtank systems."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "streamlit"
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "pyrefly",
+    "pytest"
+]
+
+## >> ---------------------------------------------------------------------------- >> ##
+##                                     BUILD SYSTEM
+## >> ---------------------------------------------------------------------------- >> ##
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14"]
+build-backend = "uv_build"
+
+
+## >> ---------------------------------------------------------------------------- >> ##
+##                                     TYPE CHECKER
+## >> ---------------------------------------------------------------------------- >> ##
+[tool.pyrefly]
+project-includes = ["src", "tests"]
+
+
+## >> ---------------------------------------------------------------------------- >> ##
+##                                        PYTEST
+## >> ---------------------------------------------------------------------------- >> ##
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]   # `src` is needed so doctesting is run
+addopts = "--doctest-modules -ra"
+doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
+
+
+## >> ---------------------------------------------------------------------------- >> ##
+##                                        LINTER
+## >> ---------------------------------------------------------------------------- >> ##
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+line-ending = "auto"
+docstring-code-format = true
+skip-magic-trailing-comma = false  # a trailing comma forces one item per line
+
+[tool.ruff.lint]
+select = [
+    # --- Core correctness & style ---
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort import ordering
+    "N", # pep8-naming
+    "UP", # pyupgrade (modern syntax)
+
+    # --- Quality checks ---
+    "B", # flake8-bugbear (likely bugs)
+    "C4", # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "RET", # flake8-return
+    "PERF", # perflint
+    "ARG", # unused arguments
+    "PTH", # prefer pathlib
+    "S", # flake8-bandit (security)
+    "RUF", # ruff-specific rules
+    "PL", # pylint
+    "COM", # flake8-commas (COM812: require trailing comma in multi-line brackets)
+
+    # --- Complexity ---
+    "C90", # mccabe cyclomatic complexity (C901)
+    # PLR0911/0912/0913/0915 (returns/branches/args/statements) come from "PL"
+
+    # --- Docstring tone & assurance ---
+    "D", # pydocstyle (includes D401: imperative mood)
+    "DOC", # pydoclint: docstrings must match raises/returns/yields
+]
+ignore = [
+    "D100", # missing module docstring (relax; enforce per-package if desired)
+    "D104", # missing package docstring
+    "D107", # missing __init__ docstring (document on the class instead)
+    "D203", # conflicts with D211
+    "D213", # conflicts with D212
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+max-args = 6
+max-branches = 12
+max-returns = 6
+max-statements = 50
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["fisherman"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "D", # tests don't need docstrings
+    "DOC",
+    "S101", # assert is expected in tests
+    "PLR2004", # magic values are fine in assertions
+    "ARG", # fixtures often look unused
+]
