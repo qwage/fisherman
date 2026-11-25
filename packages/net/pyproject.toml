@@ -8,7 +8,11 @@ dependencies = [
     "uvicorn",
     "sqlalchemy",
     "pydantic",
+    "click",
 ]
+
+[project.scripts]
+net = "net.cli:main"
 
 
 ## >> ---------------------------------------------------------------------------- >> ##
