@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "net",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "net",
+      "args": ["run", "--reload", "--open"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "fisherman",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "fisherman",
+      "args": ["run", "--open"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "pytest (all)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ],
+  "compounds": [
+    {
+      "name": "net + fisherman",
+      "configurations": ["net", "fisherman"],
+      "stopAll": true
+    }
+  ]
+}

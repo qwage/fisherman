@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="net + fisherman" type="CompoundRunConfigurationType">
+    <toRun name="fisherman" type="PythonConfigurationType" />
+    <toRun name="net" type="PythonConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
