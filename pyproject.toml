@@ -1,42 +1,34 @@
-[project]
-name = "fisherman"
-version = "0.0.1"
-authors = [{ name = "Quinn Joyce" }, { name = "Claude" }]
-description = "A Python package for managing hobbyist fishtank systems."
-readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "streamlit"
-]
+## >> ---------------------------------------------------------------------------- >> ##
+##                                  WORKSPACE ROOT
+## >> ---------------------------------------------------------------------------- >> ##
+# Virtual root: holds shared tooling config only. Each package under packages/
+# has its own pyproject.toml.
+#   bobber (Pi Zero client) -> net (FastAPI + pond storage) <- fisherman (Streamlit)
+[tool.uv.workspace]
+members = ["packages/*"]
 
 [dependency-groups]
 dev = [
     "ruff",
     "pyrefly",
-    "pytest"
+    "pytest",
+    "httpx",
 ]
-
-## >> ---------------------------------------------------------------------------- >> ##
-##                                     BUILD SYSTEM
-## >> ---------------------------------------------------------------------------- >> ##
-[build-system]
-requires = ["uv_build>=0.13.9,<0.14"]
-build-backend = "uv_build"
 
 
 ## >> ---------------------------------------------------------------------------- >> ##
 ##                                     TYPE CHECKER
 ## >> ---------------------------------------------------------------------------- >> ##
 [tool.pyrefly]
-project-includes = ["src", "tests"]
+project-includes = ["packages", "tests"]
 
 
 ## >> ---------------------------------------------------------------------------- >> ##
 ##                                        PYTEST
 ## >> ---------------------------------------------------------------------------- >> ##
 [tool.pytest.ini_options]
-testpaths = ["tests", "src"]   # `src` is needed so doctesting is run
-addopts = "--doctest-modules -ra"
+testpaths = ["packages", "tests"]   # `packages` is needed so doctesting is run
+addopts = "--doctest-modules --import-mode=importlib -ra"
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 
@@ -105,10 +97,10 @@ max-statements = 50
 convention = "google"
 
 [tool.ruff.lint.isort]
-known-first-party = ["fisherman"]
+known-first-party = ["fisherman", "net", "bobber"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = [
+"**/tests/**" = [
     "D", # tests don't need docstrings
     "DOC",
     "S101", # assert is expected in tests
