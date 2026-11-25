@@ -262,12 +262,14 @@ name = "fisherman"
 version = "0.0.1"
 source = { editable = "packages/fisherman" }
 dependencies = [
+    { name = "click" },
     { name = "httpx" },
     { name = "streamlit" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "click" },
     { name = "httpx" },
     { name = "streamlit" },
 ]
@@ -288,6 +290,7 @@ name = "fisherman-net"
 version = "0.0.1"
 source = { editable = "packages/net" }
 dependencies = [
+    { name = "click" },
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "sqlalchemy" },
@@ -296,6 +299,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "click" },
     { name = "fastapi" },
     { name = "pydantic" },
     { name = "sqlalchemy" },
