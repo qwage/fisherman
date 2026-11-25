@@ -1,0 +1,22 @@
+[project]
+name = "fisherman-net"
+version = "0.0.1"
+description = "FastAPI service that catches sensor readings and keeps them in the pond."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "pydantic",
+]
+
+
+## >> ---------------------------------------------------------------------------- >> ##
+##                                     BUILD SYSTEM
+## >> ---------------------------------------------------------------------------- >> ##
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "net"
