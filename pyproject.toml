@@ -20,8 +20,7 @@ dev = [
 ##                                     TYPE CHECKER
 ## >> ---------------------------------------------------------------------------- >> ##
 [tool.pyrefly]
-project-includes = ["packages", "scripts", "tests"]
-search-path = ["scripts"]
+project-includes = ["packages", "tests"]
 
 
 ## >> ---------------------------------------------------------------------------- >> ##
