@@ -68,3 +68,60 @@ def test_run_defaults_to_app_data_dir(tmp_path, monkeypatch):
 
     assert result.exit_code == 0, result.output
     assert str(tmp_path / "appdata" / "fisherman.db") in result.output
+
+
+def test_open_flag_opens_docs_on_localhost(tmp_path, monkeypatch):
+    opened = []
+    monkeypatch.setattr(cli.uvicorn, "run", lambda *_a, **_kw: None)
+    monkeypatch.setattr(cli, "open_when_ready", opened.append)
+    monkeypatch.setenv("FISHERMAN_DB", str(tmp_path / "x.db"))
+
+    result = CliRunner().invoke(cli.main, ["run", "--open", "--host", "0.0.0.0"])  # noqa: S104
+
+    assert result.exit_code == 0, result.output
+    assert opened == ["http://localhost:8000/docs"]
+
+
+def test_no_open_flag_opens_nothing(tmp_path, monkeypatch):
+    opened = []
+    monkeypatch.setattr(cli.uvicorn, "run", lambda *_a, **_kw: None)
+    monkeypatch.setattr(cli, "open_when_ready", opened.append)
+    monkeypatch.setenv("FISHERMAN_DB", str(tmp_path / "x.db"))
+
+    CliRunner().invoke(cli.main, ["run"])
+
+    assert opened == []
+
+
+def test_wait_and_open_retries_until_server_answers(monkeypatch):
+    attempts = []
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc):
+            return False
+
+    def fake_urlopen(url, timeout):
+        attempts.append(url)
+        if len(attempts) < 3:
+            raise ConnectionRefusedError
+        return Response()
+
+    opened = []
+    monkeypatch.setattr(cli.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(cli.time, "sleep", lambda _s: None)
+    monkeypatch.setattr(cli.webbrowser, "open", opened.append)
+
+    assert cli.wait_and_open("http://localhost:8000/docs") is True
+    assert len(attempts) == 3
+    assert opened == ["http://localhost:8000/docs"]
+
+
+def test_wait_and_open_gives_up_after_timeout(monkeypatch):
+    opened = []
+    monkeypatch.setattr(cli.webbrowser, "open", opened.append)
+
+    assert cli.wait_and_open("http://localhost:1/docs", timeout=0) is False
+    assert opened == []
